@@ -4,7 +4,7 @@
 > Following the launch of the brand new [Complete Python Developer: Zero to Mastery](https://www.udemy.com/course/complete-python-developer-zero-to-mastery/?couponCode=LEVELUPZTM) course, here is a perfect opportunity to put those new found skills to the test. Here we will be using Python to take an image input which it will then convert into ASCII Art.
 
 # How to get Started:
-In order to get started on this project, I recommend you watch the section on **Scripting** in the [Python course](https://www.udemy.com/course/complete-python-developer-zero-to-mastery/?couponCode=LEVELUPZTM). We talk about ```sys.argv``` and ```Pillow``` library (Image processin) in that section which would help you!
+In order to get started on this project, I recommend you watch the section on **Scripting** in the [Python course](https://www.udemy.com/course/complete-python-developer-zero-to-mastery/?couponCode=LEVELUPZTM). We talk about ```sys.argv``` and ```Pillow``` library (Image processing) in that section which would help you!
 
 1. Clone this repo
 2. Make sure you have Python 3 installed on your machine
