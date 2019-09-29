@@ -12,6 +12,9 @@ In order to get started on this project, I recommend you watch the section on **
 4. run the command: `python3 make_art.py zeroToMasteryIcon.png`
 5. Stare with amazement 😮
 
+
+**All discussions around this event can now be had in our #hacktoberfest-2019 channel on Discord!**
+
 # How to contribute?
 
 Now that you see how this command line tool works, let's see how we can evolve it with our ZTM community help!! Maybe we want to display this on an HTML web page where users can submit images and we convert it to ASCII art? Maybe we want to improve how the Command Line Tool works/make it more customizeable? Or maybe modify the script to do many other types of art beyond ASCII. 
