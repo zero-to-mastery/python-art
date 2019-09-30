@@ -9,7 +9,7 @@ In order to get started on this project, I recommend you watch the section on **
 1. Clone this repo
 2. Make sure you have Python 3 installed on your machine
 3. Install [Pillow library](https://pillow.readthedocs.io/en/stable/installation.html)
-4. run the command: `python3 make_art.py zeroToMasteryIcon.png`
+4. run the command: `python3 make_art.py zeroToMasteryIcon.png 1` or `python3 make_art.py zeroToMasteryIcon.png 2` for a more clear output [zoomout a little bit]
 5. Stare with amazement 😮
 
 
