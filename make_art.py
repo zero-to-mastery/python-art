@@ -4,8 +4,7 @@
 # code modified to work with Python 3 by @aneagoie
 from PIL import Image
 ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
-from guppy import hpy
-h = hpy()
+
 
 def scale_image(image, clearity):
     """Resizes an image preserving the aspect ratio.
@@ -30,10 +29,8 @@ def map_pixels_to_ascii_chars(image, range_width=25):
     0-255 is divided into 11 ranges of 25 pixels each.
     """
 
-    pixels_in_image = list(image.getdata())
     pixels_to_chars = [ASCII_CHARS[int(pixel_value/range_width)] for pixel_value in
-                       pixels_in_image]
-    print(h.heap())
+                       image.getdata()]
     return "".join(pixels_to_chars)
 
 
