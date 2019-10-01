@@ -9,3 +9,6 @@ One can Contribute in this by adding more css to the webpage
 # Demo Website
 
 [This](http://13.127.254.208/cgi-bin/pythonascii/print) is the the link to demo website.
+
+# Sample
+![GitHub Logo](https://raw.githubusercontent.com/hvijaycse/python-art/master/website/website.PNG)
