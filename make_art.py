@@ -2,7 +2,11 @@
 
 # code credit goes to: https://www.hackerearth.com/practice/notes/beautiful-python-a-simple-ascii-art-generator-from-images/
 # code modified to work with Python 3 by @aneagoie
+import sys
 from PIL import Image
+import requests
+from io import BytesIO
+
 ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
 
 
@@ -29,8 +33,10 @@ def map_pixels_to_ascii_chars(image, range_width=25):
     0-255 is divided into 11 ranges of 25 pixels each.
     """
 
+    pixels_in_image = list(image.getdata())
     pixels_to_chars = [ASCII_CHARS[int(pixel_value/range_width)] for pixel_value in
                        image.getdata()]
+
     return "".join(pixels_to_chars)
 
 
@@ -51,10 +57,19 @@ def handle_image_conversion(image_filepath, clearity):
     image = None
     try:
         image = Image.open(image_filepath)
-    except Exception as e:
-        print(f"Unable to open image file {image_filepath}.")
-        print(e)
-        return
+    except:
+        """
+        If path entered is invalid or image not found,
+        Tries to get image from the given image_filepath by assuming as URL
+        This requires "requests" library to fecth data from url.
+        """
+        try:
+            response = requests.get(image_filepath)
+            image = Image.open(BytesIO(response.content))
+        except Exception as e:
+            print(f"Unable to open image file {image_filepath}.")
+            print(e)
+            return
 
     image_ascii = convert_image_to_ascii(image, clearity)
     print(image_ascii)
@@ -72,7 +87,8 @@ def create_thumbnail(image_file_path):
         return
 
     print(
-        f"Creating a thumbnail in the current directory (size: {input_size}X{input_size})...")
+          f"Creating a thumbnail in the current directory (size:"
+          "{input_size}X{input_size})...")
 
     image_name, image_extention = image_file_path.split(".")
     image.thumbnail(size)
@@ -82,28 +98,31 @@ def create_thumbnail(image_file_path):
 
 
 def menu():
-    choice = input("""
-                      A: Create an ASCII representation
-                      B: Create a thumbnail
-                      Q: Quit/Log Out
+    exit = False
+    while not exit:
+        choice = input("""
+                          A: Create an ASCII representation
+                          B: Create a thumbnail
+                          Q: Quit/Log Out
 
-                      Please enter your choice: """)
+                          Please enter your choice: """)
 
-    if choice == "A" or choice == "a":
-        print(f"\n Creating an ASCII representation of {image_file_path}: \n")
-        handle_image_conversion(image_file_path, clearity)
-    elif choice == "B" or choice == "b":
-        create_thumbnail(image_file_path)
-    elif choice == "Q" or choice == "q":
-        sys.exit
-    else:
-        print("You must only select either A,B or Q")
-        print("Please try again")
+        if choice == "A" or choice == "a":
+            print(f"\n Creating an ASCII representation of {image_file_path}: \n")
+            handle_image_conversion(image_file_path, clearity)
+            exit = True
+        elif choice == "B" or choice == "b":
+            create_thumbnail(image_file_path)
+            exit = True
+        elif choice == "Q" or choice == "q":
+            exit = True
+        else:
+            print("Warning!\nYou must only select either A,B or Q")
+            print("Please try again")
+    return sys.exit
 
 
 if __name__ == '__main__':
-    import sys
-
     image_file_path = sys.argv[1]
     try:
         clearity = sys.argv[2]
@@ -112,7 +131,10 @@ if __name__ == '__main__':
             clearity = 1
         elif clearity > 2:
             clearity = 2
-    except:
+    except Exception as e:
         clearity = 1
+    try:
+        menu()
+    except KeyboardInterrupt:
+        print("\nBye!")
 
-    menu()
