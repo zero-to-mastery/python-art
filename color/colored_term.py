@@ -32,23 +32,33 @@ class Color:
         if platform.system() == 'Windows':
             os.system('')
 
+    def enable(self):
+        """Enable color functionality"""
+        self.enabled = True
+    
+    def disable(self):
+        """Disable color functionality"""
+        self.enabled = False
 
     def colorful_string(self, text: str) -> str:
         """Add color codes based on some ascii character selection
         Characters used are: 3, &, =, +, *
         """
-        colored_text = ''
+        if self.enabled:
+            colored_text = ''
 
-        for char in text:
-            if char == '3':
-                colored_text += self.BLUE + char + self.RESET
-            elif char == '&':
-                colored_text += self.RED + char + self.RESET
-            elif char == '=':
-                colored_text += self.GREEN + char + self.RESET
-            elif char == '+' or char == '*':
-                colored_text += self.MAGENTA + char + self.RESET
-            else:
-                colored_text += char
-        
-        return colored_text
+            for char in text:
+                if char == '3':
+                    colored_text += self.BLUE + char + self.RESET
+                elif char == '&':
+                    colored_text += self.RED + char + self.RESET
+                elif char == '=':
+                    colored_text += self.GREEN + char + self.RESET
+                elif char == '+' or char == '*':
+                    colored_text += self.MAGENTA + char + self.RESET
+                else:
+                    colored_text += char
+            
+            return colored_text
+        else:
+            return text
