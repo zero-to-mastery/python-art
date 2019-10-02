@@ -7,8 +7,10 @@ from PIL import Image
 import requests
 from io import BytesIO
 
-ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
+from color.colored_term import Color
 
+ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
+color = Color()
 
 def scale_image(image, clearity):
     """Resizes an image preserving the aspect ratio.
@@ -71,7 +73,7 @@ def handle_image_conversion(image_filepath, clearity):
             return
 
     image_ascii = convert_image_to_ascii(image, clearity)
-    print(image_ascii)
+    print(color.colorful_string(image_ascii))
 
 
 def create_thumbnail(image_file_path):
@@ -101,16 +103,23 @@ def menu():
     while not exit:
         choice = input("""
                           A: Create an ASCII representation
-                          B: Create a thumbnail
+                          B: Create an colored ASCII representation
+                          C: Create a thumbnail
                           Q: Quit/Log Out
 
                           Please enter your choice: """)
 
         if choice == "A" or choice == "a":
             print(f"\n Creating an ASCII representation of {image_file_path}: \n")
+            color.disable()
             handle_image_conversion(image_file_path, clearity)
             exit = True
         elif choice == "B" or choice == "b":
+            print(f"\n Creating a colored ASCII representation of {image_file_path}: \n")
+            color.enable()
+            handle_image_conversion(image_file_path, clearity)
+            exit = True
+        elif choice == "C" or choice == "c":
             create_thumbnail(image_file_path)
             exit = True
         elif choice == "Q" or choice == "q":
