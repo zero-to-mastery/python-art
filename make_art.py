@@ -3,6 +3,8 @@
 # code credit goes to: https://www.hackerearth.com/practice/notes/beautiful-python-a-simple-ascii-art-generator-from-images/
 # code modified to work with Python 3 by @aneagoie
 from PIL import Image
+import requests
+from io import BytesIO
 ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
 
 
@@ -53,10 +55,19 @@ def handle_image_conversion(image_filepath, clearity):
     image = None
     try:
         image = Image.open(image_filepath)
-    except Exception as e:
-        print(f"Unable to open image file {image_filepath}.")
-        print(e)
-        return
+    except:
+        """
+        If path entered is invalid or image not found,
+        Tries to get image from the given image_filepath by assuming as URL
+        This requires "requests" library to fecth data from url.
+        """
+        try:
+            response = requests.get(image_filepath)
+            image = Image.open(BytesIO(response.content))
+        except Exception as e:
+            print(f"Unable to open image file {image_filepath}.")
+            print(e)
+            return
 
     image_ascii = convert_image_to_ascii(image, clearity)
     print(image_ascii)
