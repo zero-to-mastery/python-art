@@ -2,9 +2,9 @@
 
 # Website for Ascii Art via Python cgi
 
-This directory contain the python cgi webpage for having same result on browser as on the terminal and without any reuirement
+This directory contains the python cgi webpage, which will have the same result on a browser as on the terminal, without any requirements.
 
-One can Contribute in this by adding more css to the webpage
+One can contribute to this by adding more CSS to the webpage.
 
 # Demo Website
 
