@@ -3,7 +3,11 @@
 #code credit goes to: https://www.hackerearth.com/practice/notes/beautiful-python-a-simple-ascii-art-generator-from-images/
 #code modified to work with Python 3 by @aneagoie
 from PIL import Image
+
+from color.colored_term import Color
+
 ASCII_CHARS = [ '#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
+color = Color()
 
 def scale_image(image, clearity):
     """Resizes an image preserving the aspect ratio.
@@ -54,7 +58,8 @@ def handle_image_conversion(image_filepath,clearity):
         return
 
     image_ascii = convert_image_to_ascii(image,clearity)
-    print(image_ascii)
+    colored_ascii = color.colorful_string(image_ascii)
+    print(colored_ascii)
 
 if __name__=='__main__':
     import sys
