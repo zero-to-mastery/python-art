@@ -2,7 +2,9 @@
 
 # code credit goes to: https://www.hackerearth.com/practice/notes/beautiful-python-a-simple-ascii-art-generator-from-images/
 # code modified to work with Python 3 by @aneagoie
+import sys
 from PIL import Image
+
 ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
 
 
@@ -84,28 +86,31 @@ def create_thumbnail(image_file_path):
 
 
 def menu():
-    choice = input("""
-                      A: Create an ASCII representation
-                      B: Create a thumbnail
-                      Q: Quit/Log Out
+    exit = False
+    while not exit:
+        choice = input("""
+                          A: Create an ASCII representation
+                          B: Create a thumbnail
+                          Q: Quit/Log Out
 
-                      Please enter your choice: """)
+                          Please enter your choice: """)
 
-    if choice == "A" or choice == "a":
-        print(f"\n Creating an ASCII representation of {image_file_path}: \n")
-        handle_image_conversion(image_file_path, clearity)
-    elif choice == "B" or choice == "b":
-        create_thumbnail(image_file_path)
-    elif choice == "Q" or choice == "q":
-        sys.exit
-    else:
-        print("You must only select either A,B or Q")
-        print("Please try again")
+        if choice == "A" or choice == "a":
+            print(f"\n Creating an ASCII representation of {image_file_path}: \n")
+            handle_image_conversion(image_file_path, clearity)
+            exit = True
+        elif choice == "B" or choice == "b":
+            create_thumbnail(image_file_path)
+            exit = True
+        elif choice == "Q" or choice == "q":
+            exit = True
+        else:
+            print("Warning!\nYou must only select either A,B or Q")
+            print("Please try again")
+    return sys.exit
 
 
 if __name__ == '__main__':
-    import sys
-
     image_file_path = sys.argv[1]
     try:
         clearity = sys.argv[2]
@@ -116,5 +121,8 @@ if __name__ == '__main__':
             clearity = 2
     except:
         clearity = 1
+    try:
+        menu()
+    except KeyboardInterrupt:
+        print("\nBye!")
 
-    menu()
