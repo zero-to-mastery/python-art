@@ -34,8 +34,8 @@ def map_pixels_to_ascii_chars(image, range_width=25):
     """
 
     pixels_in_image = list(image.getdata())
-    pixels_to_chars = [ASCII_CHARS[int(pixel_value/range_width)]
-                       for pixel_value in pixels_in_image]
+    pixels_to_chars = [ASCII_CHARS[int(pixel_value/range_width)] for pixel_value in
+                       image.getdata()]
 
     return "".join(pixels_to_chars)
 
