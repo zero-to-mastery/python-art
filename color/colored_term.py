@@ -1,5 +1,13 @@
 # This module appends color code instructions to strings so that the terminal displays colored text
-# Reference: 
+# References:
+# Activating VT100 on Windows 10 https://stackoverflow.com/questions/51091680/activating-vt100-via-os-system
+# Color codes: 
+# - https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+# - https://stackoverflow.com/questions/287871/how-to-print-colored-text-in-terminal-in-python
+
+import platform
+import os
+
 
 class Color:
     """Holds the color code instructions to be applied to any string that will be printed
@@ -13,11 +21,17 @@ class Color:
     Takes a string parameter and adds color codes based on ascii character selection
     """
     def __init__(self):
+        # ANSI escape senquence color codes
         self.RED = '\033[31m'
         self.GREEN = '\033[32m'
         self.BLUE = '\033[34m'
         self.MAGENTA = '\033[35m'
         self.RESET = '\033[0m'
+        # Checks of OS is windows to activate VT100
+        # NOTE: this only works for Windows 10, prior Windows versions don't support ANSI escape sequences
+        if platform.system() == 'Windows':
+            os.system('')
+
 
     def colorful_string(self, text: str) -> str:
         """Add color codes based on some ascii character selection
