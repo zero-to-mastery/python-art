@@ -33,7 +33,6 @@ def map_pixels_to_ascii_chars(image, range_width=25):
     0-255 is divided into 11 ranges of 25 pixels each.
     """
 
-    pixels_in_image = list(image.getdata())
     pixels_to_chars = [ASCII_CHARS[int(pixel_value/range_width)] for pixel_value in
                        image.getdata()]
 
