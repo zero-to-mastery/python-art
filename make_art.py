@@ -2,6 +2,7 @@
 
 # code credit goes to: https://www.hackerearth.com/practice/notes/beautiful-python-a-simple-ascii-art-generator-from-images/
 # code modified to work with Python 3 by @aneagoie
+import argparse
 import sys
 from PIL import Image
 import requests
@@ -122,9 +123,15 @@ def menu():
 
 
 if __name__ == '__main__':
-    image_file_path = sys.argv[1]
+    parser = argparse.ArgumentParser(description='Convert images to ASCII art')
+    parser.add_argument('-i', '--image', help='Image filepath', required=True)
+    parser.add_argument('-c', '--clearity', help='Image clearity (float)')
+
+    args = parser.parse_args()
+
+    image_file_path = args.image
     try:
-        clearity = sys.argv[2]
+        clearity = args.clearity
         clearity = float(clearity)
         if not clearity:
             clearity = 1
@@ -136,4 +143,3 @@ if __name__ == '__main__':
         menu()
     except KeyboardInterrupt:
         print("\nBye!")
-
