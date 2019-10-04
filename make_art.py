@@ -2,12 +2,14 @@
 
 # code credit goes to: https://www.hackerearth.com/practice/notes/beautiful-python-a-simple-ascii-art-generator-from-images/
 # code modified to work with Python 3 by @aneagoie
+import argparse
 import sys
-from PIL import Image
-import requests
 from io import BytesIO
 
-from color.colored_term import Color
+from PIL import Image
+import requests
+
+from color.colored_term import Color, ANSIColor
 
 ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
 color = Color()
@@ -68,54 +70,59 @@ def handle_image_conversion(image_filepath, clearity):
             response = requests.get(image_filepath)
             image = Image.open(BytesIO(response.content))
         except Exception as e:
-            print(f"Unable to open image file {image_filepath}.")
+            msg = f"Unable to open image file {image_filepath}."
+            print(Color.colorful_string(msg, ANSIColor.RED))
             print(e)
             return
 
     image_ascii = convert_image_to_ascii(image, clearity)
-    print(color.colorful_string(image_ascii))
+    print(color.colorful_ascii_chars(image_ascii))
 
 
 def create_thumbnail(image_file_path):
-    input_size = int(input("Please enter the needed output size in pixels: "))
+    msg = "Please enter the needed output size in pixels: "
+    input_size = int(input(Color.colorful_string(msg, ANSIColor.CYAN)))
     size = (input_size, input_size)
 
     try:
         image = Image.open(image_file_path)
     except Exception as e:
-        print(f"Unable to open image file {image_file_path}.")
+        msg = f"Unable to open image file {image_file_path}."
+        print(Color.colorful_string(msg, ANSIColor.RED))
         print(e)
         return
 
-    print(
-          f"Creating a thumbnail in the current directory (size:"
-          "{input_size}X{input_size})...")
+    msg = f"Creating a thumbnail in the current directory (size: {input_size}X{input_size})..."
+    print(Color.colorful_string(msg, ANSIColor.YELLOW))
 
     image_name, image_extention = image_file_path.split(".")
     image.thumbnail(size)
     image.save(image_name + ".thumbnail." + image_extention, image_extention)
 
-    print("Thumbnail created. Please check in the current directory.")
+    msg = f"Thumbnail created. Please check in the current directory."
+    print(Color.colorful_string(msg, ANSIColor.GREEN))
 
 
 def menu():
     exit = False
     while not exit:
-        choice = input("""
+        print("""
                           A: Create an ASCII representation
                           B: Create an colored ASCII representation
                           C: Create a thumbnail
-                          Q: Quit/Log Out
-
-                          Please enter your choice: """)
+                          Q: Quit/Log Out""")
+        msg = f"\t\t\t  Please enter your choice: "
+        choice = input(Color.colorful_string(msg, ANSIColor.CYAN))
 
         if choice == "A" or choice == "a":
-            print(f"\n Creating an ASCII representation of {image_file_path}: \n")
+            msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
+            print(Color.colorful_string(msg, ANSIColor.GREEN))
             color.disable()
             handle_image_conversion(image_file_path, clearity)
             exit = True
         elif choice == "B" or choice == "b":
-            print(f"\n Creating a colored ASCII representation of {image_file_path}: \n")
+            msg = f"\n Creating a colored ASCII representation of {image_file_path}: \n"
+            print(Color.colorful_string(msg, ANSIColor.GREEN))
             color.enable()
             handle_image_conversion(image_file_path, clearity)
             exit = True
@@ -125,15 +132,21 @@ def menu():
         elif choice == "Q" or choice == "q":
             exit = True
         else:
-            print("Warning!\nYou must only select either A,B or Q")
-            print("Please try again")
+            msg = f"ERROR!\nYou must only select either A,B or Q\nPlease try again"
+            print(Color.colorful_string(msg, ANSIColor.RED))
     return sys.exit
 
 
 if __name__ == '__main__':
-    image_file_path = sys.argv[1]
+    parser = argparse.ArgumentParser(description='Convert images to ASCII art')
+    parser.add_argument('-i', '--image', help='Image filepath', required=True)
+    parser.add_argument('-c', '--clearity', help='Image clearity (float)')
+
+    args = parser.parse_args()
+
+    image_file_path = args.image
     try:
-        clearity = sys.argv[2]
+        clearity = args.clearity
         clearity = float(clearity)
         if not clearity:
             clearity = 1
@@ -144,5 +157,5 @@ if __name__ == '__main__':
     try:
         menu()
     except KeyboardInterrupt:
-        print("\nBye!")
-
+        msg = "\nBye!"
+        print(Color.colorful_string(msg, ANSIColor.YELLOW))
