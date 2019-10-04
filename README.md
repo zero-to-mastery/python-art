@@ -8,7 +8,7 @@ In order to get started on this project, I recommend you watch the section on **
 
 1. Clone this repo
 2. Make sure you have Python v3.6 (or greater) installed on your machine
-3. Install [Pillow library](https://pillow.readthedocs.io/en/stable/installation.html)
+3. Install the project dependencies `pip install -r requirements.txt`
 4. run the command: `python3 make_art.py -i zeroToMasteryIcon.png -c 1` or `python3 make_art.py -i zeroToMasteryIcon.png -c 2` for a more clear output [zoomout a little bit]
 5. Stare with amazement 😮
 
@@ -23,6 +23,8 @@ The options are endless and there is no wrong answer. This is all for fun, so tr
 
 ### Bonus Task:
 We have left the original code which was written in Python 2 under the `make_art_python2.py` file. See what happens when you run it with Python 3. See all of the errors? Can you fix it so it works with python 3? The answer is with the `make_art.py` file which is written in Python 3.
+
+> If you have installed new project dependencies, before commiting and creating any PR make sure to run `pip freeze > requirements.txt`.
 
 
 # But how do I make a pull request/participate?
