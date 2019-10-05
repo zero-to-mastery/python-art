@@ -14,10 +14,10 @@ from color.colored_term import Color, ANSIColor
 ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
 color = Color()
 
-def scale_image(image, clearity):
+def scale_image(image, clarity):
     """Resizes an image preserving the aspect ratio.
     """
-    new_width = int(100*clearity)
+    new_width = int(100*clarity)
     (original_width, original_height) = image.size
     aspect_ratio = original_height/float(original_width)
     new_height = int(aspect_ratio * new_width)
@@ -43,9 +43,9 @@ def map_pixels_to_ascii_chars(image, range_width=25):
     return "".join(pixels_to_chars)
 
 
-def convert_image_to_ascii(image, clearity):
-    new_width = int(100*clearity)
-    image = scale_image(image, clearity)
+def convert_image_to_ascii(image, clarity):
+    new_width = int(100*clarity)
+    image = scale_image(image, clarity)
     image = convert_to_grayscale(image)
 
     pixels_to_chars = map_pixels_to_ascii_chars(image)
@@ -56,7 +56,7 @@ def convert_image_to_ascii(image, clearity):
     return "\n".join(image_ascii)
 
 
-def handle_image_conversion(image_filepath, clearity):
+def handle_image_conversion(image_filepath, clarity):
     image = None
     try:
         image = Image.open(image_filepath)
@@ -75,7 +75,7 @@ def handle_image_conversion(image_filepath, clearity):
             print(e)
             return
 
-    image_ascii = convert_image_to_ascii(image, clearity)
+    image_ascii = convert_image_to_ascii(image, clarity)
     print(color.colorful_ascii_chars(image_ascii))
 
 
@@ -118,13 +118,13 @@ def menu():
             msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
             print(Color.colorful_string(msg, ANSIColor.GREEN))
             color.disable()
-            handle_image_conversion(image_file_path, clearity)
+            handle_image_conversion(image_file_path, clarity)
             exit = True
         elif choice == "B" or choice == "b":
             msg = f"\n Creating a colored ASCII representation of {image_file_path}: \n"
             print(Color.colorful_string(msg, ANSIColor.GREEN))
             color.enable()
-            handle_image_conversion(image_file_path, clearity)
+            handle_image_conversion(image_file_path, clarity)
             exit = True
         elif choice == "C" or choice == "c":
             create_thumbnail(image_file_path)
@@ -140,20 +140,20 @@ def menu():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert images to ASCII art')
     parser.add_argument('-i', '--image', help='Image filepath', required=True)
-    parser.add_argument('-c', '--clearity', help='Image clearity (float)')
+    parser.add_argument('-c', '--clarity', help='Image clarity (float)')
 
     args = parser.parse_args()
 
     image_file_path = args.image
     try:
-        clearity = args.clearity
-        clearity = float(clearity)
-        if not clearity:
-            clearity = 1
-        elif clearity > 2:
-            clearity = 2
+        clarity = args.clarity
+        clarity = float(clarity)
+        if not clarity:
+            clarity = 1
+        elif clarity > 2:
+            clarity = 2
     except Exception as e:
-        clearity = 1
+        clarity = 1
     try:
         menu()
     except KeyboardInterrupt:
