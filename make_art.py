@@ -11,8 +11,9 @@ import requests
 
 from color.colored_term import Color, ANSIColor
 
-ASCII_CHARS = ['#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@']
+ASCII_CHARS = ('#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@')
 color = Color()
+
 
 def scale_image(image, clarity):
     """Resizes an image preserving the aspect ratio.
@@ -104,37 +105,35 @@ def create_thumbnail(image_file_path):
 
 
 def menu():
-    exit = False
-    while not exit:
+
+    while True:
         print("""
-                          A: Create an ASCII representation
-                          B: Create an colored ASCII representation
-                          C: Create a thumbnail
-                          Q: Quit/Log Out""")
-        msg = f"\t\t\t  Please enter your choice: "
+                        ► A: Create an ASCII representation
+                        ► B: Create a colored ASCII representation
+                        ► C: Create a thumbnail
+                        ☒ Q: Quit/Log Out""")
+        msg = "\t\t\t  ↳ Please enter your choice: "
         choice = input(Color.colorful_string(msg, ANSIColor.CYAN))
 
-        if choice == "A" or choice == "a":
+        if choice.upper() == 'A':
             msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
             print(Color.colorful_string(msg, ANSIColor.GREEN))
             color.disable()
             handle_image_conversion(image_file_path, clarity)
-            exit = True
-        elif choice == "B" or choice == "b":
+        elif choice.upper() == 'B':
             msg = f"\n Creating a colored ASCII representation of {image_file_path}: \n"
             print(Color.colorful_string(msg, ANSIColor.GREEN))
             color.enable()
             handle_image_conversion(image_file_path, clarity)
-            exit = True
-        elif choice == "C" or choice == "c":
+        elif choice.upper() == 'C':
             create_thumbnail(image_file_path)
-            exit = True
-        elif choice == "Q" or choice == "q":
-            exit = True
+        elif choice.upper() == 'Q':
+            break
         else:
-            msg = f"ERROR!\nYou must only select either A,B or Q\nPlease try again"
+            msg = f"ERROR!\nYou must only select either A,B,C or Q.\nPlease try again."
             print(Color.colorful_string(msg, ANSIColor.RED))
-    return sys.exit
+
+        print('\n\n')
 
 
 if __name__ == '__main__':
