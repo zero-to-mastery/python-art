@@ -82,9 +82,14 @@ def handle_image_conversion(image_filepath, clarity):
 
 
 def create_thumbnail(image_file_path):
-    msg = "Please enter the needed output size in pixels: "
-    input_size = int(input(Color.colorful_string(msg, ANSIColor.CYAN)))
-    size = (input_size, input_size)
+    while True:
+        try:
+            msg = "Please enter the needed output size in pixels: "
+            input_size = int(input(Color.colorful_string(msg, ANSIColor.CYAN)))
+        except ValueError as e:
+            print(e)
+            continue
+
 
     try:
         image = Image.open(image_file_path)
