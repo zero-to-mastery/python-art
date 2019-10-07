@@ -5,6 +5,7 @@
 import argparse
 import sys
 from io import BytesIO
+from bullet import Bullet, colors
 
 from PIL import Image
 import requests
@@ -105,15 +106,31 @@ def create_thumbnail(image_file_path):
 
 
 def menu():
-
+    options =[
+        "A: Create an ASCII representation",
+        "B: Create a colored ASCII representation",
+        "C: Create a thumbnail",
+        "Q: Quit/Log Out",
+    ]
     while True:
-        print("""
-                        ► A: Create an ASCII representation
-                        ► B: Create a colored ASCII representation
-                        ► C: Create a thumbnail
-                        ☒ Q: Quit/Log Out""")
-        msg = "\t\t\t  ↳ Please enter your choice: "
-        choice = input(Color.colorful_string(msg, ANSIColor.CYAN))
+
+
+        userChoices = Bullet(
+            # Prompt for the user to see
+            prompt = "\n\tUse up & down arrows and hit enter to make choice:",
+            # List of options to choose from
+            choices = options,
+            # How much space to pad in from the start of the prompt 
+            align = 5,
+            # Spacing between the bullet and the choice
+            margin = 2,
+            # Space between the prompt and the list of choices
+            shift = 1,
+            # The foreground colour of the bullet
+            bullet_color = colors.foreground["cyan"]
+        )
+        menu = userChoices.launch()
+        choice = menu[0]
 
         if choice.upper() == 'A':
             msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
