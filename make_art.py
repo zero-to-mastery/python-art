@@ -10,10 +10,10 @@ from bullet import Bullet, colors
 from PIL import Image
 import requests
 
-from color.colored_term import Color, ANSIColor
+from color.colored_term import ColorTerm, ANSIColor
 
 ASCII_CHARS = ('#', '?', ' ', '.', '=', '+', '.', '*', '3', '&', '@')
-color = Color()
+color = ColorTerm()
 
 
 def scale_image(image, clarity):
@@ -74,7 +74,7 @@ def get_image_conversion(image_filepath, clarity):
             image = Image.open(BytesIO(response.content))
         except Exception as e:
             msg = f"Unable to open image file {image_filepath}."
-            print(Color.colorful_string(msg, ANSIColor.RED))
+            print(color.error(msg))
             print(e)
             return
 
@@ -85,7 +85,7 @@ def create_thumbnail(image_file_path):
     while True:
         try:
             msg = "Please enter the needed output size in pixels: "
-            input_size = int(input(Color.colorful_string(msg, ANSIColor.CYAN)))
+            input_size = int(input(color.info(msg)))
         except ValueError as e:
             print(e)
             continue
@@ -97,12 +97,12 @@ def create_thumbnail(image_file_path):
         image = Image.open(image_file_path)
     except Exception as e:
         msg = f"Unable to open image file {image_file_path}."
-        print(Color.colorful_string(msg, ANSIColor.RED))
+        print(color.error(msg))
         print(e)
         return
 
     msg = f"Creating a thumbnail in the current directory (size: {input_size}X{input_size})..."
-    print(Color.colorful_string(msg, ANSIColor.YELLOW))
+    print(color.info(msg))
 
     size = input_size, input_size
 
@@ -111,17 +111,18 @@ def create_thumbnail(image_file_path):
     image.save(image_name + "-thumbnail." + image_extention, image_extention)
 
     msg = f"Thumbnail created. Please check in the current directory."
-    print(Color.colorful_string(msg, ANSIColor.GREEN))
+    print(color.success(msg))
 
 def save_text_to_file(ascii_art, filename):
     try:
         with open(filename, 'w') as out_file:
             out_file.write(ascii_art)
     except Exception as e:
-        print(f'Error: could not open \'{filename}\' for writing')
+        msg = f'Error: could not open \'{filename}\' for writing'
+        print(color.error(msg))
         sys.exit()
-
-    print(f'Saved to \'{filename}\'.')
+    msg = f'Saved to \'{filename}\'.'
+    print(color.success(msg))
 
 
 def menu(image_file_path, clarity):
@@ -156,23 +157,25 @@ def menu(image_file_path, clarity):
                 msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
                 color.disable()
             elif choice.upper() == 'B':
-                print('bbbbbbbbbbb')
                 msg = f"\n Creating a colored ASCII representation of {image_file_path}: \n"
                 color.enable()
 
-            print(Color.colorful_string(msg, ANSIColor.GREEN))
+            print(color.info(msg))
             image_ascii = get_image_conversion(image_file_path, clarity)
-            print(color.colorful_ascii_chars(image_ascii))
+            print(color.ascii_color_chars(image_ascii))
 
             while True:
-                save = input('\nSave to file? ')
+                msg = '\nSave to file? '
+                save = input(color.info(msg))
             
                 if save.upper() == 'Y' or save.upper() == 'N':
                     if save.upper() == 'Y':
-                        save_text_to_file(image_ascii, input('Filename: '))
+                        msg = 'Filename: '
+                        save_text_to_file(image_ascii, input(color.info(msg)))
                     break
                 else:
-                    print('Please enter \'Y\' or \'N\'.')
+                    msg = 'Please enter \'Y\' or \'N\'.'
+                    print(color.warning(msg))
                     continue
 
         elif choice.upper() == 'C':
@@ -181,9 +184,9 @@ def menu(image_file_path, clarity):
             break
         else:
             msg = f"ERROR!\nYou must only select either A,B,C or Q.\nPlease try again."
-            print(Color.colorful_string(msg, ANSIColor.RED))
+            print(color.error(msg))
 
-        print('\n\n')
+        print(f'\n\n')
 
 
 def main():
@@ -208,7 +211,7 @@ def main():
         menu(image_file_path, clarity)
     except KeyboardInterrupt:
         msg = "\nBye!"
-        print(Color.colorful_string(msg, ANSIColor.YELLOW))
+        print(Color.colored_string(msg, ANSIColor.MAGENTA))
 
 if __name__ == '__main__':
     main()
