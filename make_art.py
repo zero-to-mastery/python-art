@@ -58,8 +58,9 @@ def convert_image_to_ascii(image, clarity):
     return "\n".join(image_ascii)
 
 
-def handle_image_conversion(image_filepath, clarity):
+def get_image_conversion(image_filepath, clarity):
     image = None
+
     try:
         image = Image.open(image_filepath)
     except:
@@ -77,8 +78,7 @@ def handle_image_conversion(image_filepath, clarity):
             print(e)
             return
 
-    image_ascii = convert_image_to_ascii(image, clarity)
-    print(color.colorful_ascii_chars(image_ascii))
+    return convert_image_to_ascii(image, clarity)
 
 
 def create_thumbnail(image_file_path):
@@ -113,17 +113,26 @@ def create_thumbnail(image_file_path):
     msg = f"Thumbnail created. Please check in the current directory."
     print(Color.colorful_string(msg, ANSIColor.GREEN))
 
+def save_text_to_file(ascii_art, filename):
+    try:
+        with open(filename, 'w') as out_file:
+            out_file.write(ascii_art)
+    except Exception as e:
+        print(f'Error: could not open \'{filename}\' for writing')
+        sys.exit()
 
-def menu():
+    print(f'Saved to \'{filename}\'.')
+
+
+def menu(image_file_path, clarity):
     options =[
         "A: Create an ASCII representation",
         "B: Create a colored ASCII representation",
         "C: Create a thumbnail",
         "Q: Quit/Log Out",
     ]
+    
     while True:
-
-
         userChoices = Bullet(
             # Prompt for the user to see
             prompt = "\n\tUse up & down arrows and hit enter to make choice:",
@@ -138,19 +147,34 @@ def menu():
             # The foreground colour of the bullet
             bullet_color = colors.foreground["cyan"]
         )
+
         menu = userChoices.launch()
         choice = menu[0]
 
-        if choice.upper() == 'A':
-            msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
+        if choice.upper() == 'A' or choice.upper() == 'B':
+            if choice.upper() == 'A':
+                msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
+                color.disable()
+            elif choice.upper() == 'B':
+                print('bbbbbbbbbbb')
+                msg = f"\n Creating a colored ASCII representation of {image_file_path}: \n"
+                color.enable()
+
             print(Color.colorful_string(msg, ANSIColor.GREEN))
-            color.disable()
-            handle_image_conversion(image_file_path, clarity)
-        elif choice.upper() == 'B':
-            msg = f"\n Creating a colored ASCII representation of {image_file_path}: \n"
-            print(Color.colorful_string(msg, ANSIColor.GREEN))
-            color.enable()
-            handle_image_conversion(image_file_path, clarity)
+            image_ascii = get_image_conversion(image_file_path, clarity)
+            print(color.colorful_ascii_chars(image_ascii))
+
+            while True:
+                save = input('\nSave to file? ')
+            
+                if save.upper() == 'Y' or save.upper() == 'N':
+                    if save.upper() == 'Y':
+                        save_text_to_file(image_ascii, input('Filename: '))
+                    break
+                else:
+                    print('Please enter \'Y\' or \'N\'.')
+                    continue
+
         elif choice.upper() == 'C':
             create_thumbnail(image_file_path)
         elif choice.upper() == 'Q':
@@ -162,7 +186,7 @@ def menu():
         print('\n\n')
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description='Convert images to ASCII art')
     parser.add_argument('-i', '--image', help='Image filepath', required=True)
     parser.add_argument('-c', '--clarity', help='Image clarity (float)')
@@ -170,6 +194,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     image_file_path = args.image
+    
     try:
         clarity = args.clarity
         clarity = float(clarity)
@@ -180,7 +205,10 @@ if __name__ == '__main__':
     except Exception as e:
         clarity = 1
     try:
-        menu()
+        menu(image_file_path, clarity)
     except KeyboardInterrupt:
         msg = "\nBye!"
         print(Color.colorful_string(msg, ANSIColor.YELLOW))
+
+if __name__ == '__main__':
+    main()
