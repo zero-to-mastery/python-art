@@ -18,7 +18,7 @@ class ANSIColor:
     CYAN = '\033[36m'
     RESET = '\033[0m'
 
-class Color(ANSIColor):
+class ColorTerm(ANSIColor):
     """Holds the color code instructions to be applied to any string that will be printed
     to the stdout. The following colors are implemented:
     BLUE
@@ -47,7 +47,7 @@ class Color(ANSIColor):
         """Disable color functionality"""
         self.enabled = False
 
-    def colorful_ascii_chars(self, text: str) -> str:
+    def ascii_color_chars(self, text: str) -> str:
         """Add color codes based on some ascii character selection
         Characters used are: 3, &, =, +, *
         By defaul this is disable, make sure to call enable() before usage
@@ -74,10 +74,34 @@ class Color(ANSIColor):
             return text
 
     @staticmethod
-    def colorful_string(text: str, color: ANSIColor) -> str:
+    def colored_string(text: str, color: ANSIColor) -> str:
         """Adds ANSI color codes to the string
         colorful_string(string, ANSIColor) -> str
         Example:
         colorful_string('Hello', ANSIColor.RED) -> '\033[31mHello\033[0m'
         """
         return color + text + ANSIColor.RESET
+    
+    def warning(self, text: str) -> str:
+        """Returns the passed string text with the ANSI color
+        coded equivalent of YELLOW
+        """
+        return self.YELLOW + text + self.RESET
+    
+    def error(self, text: str) -> str:
+        """Returns the passed string text with the ANSI color
+        coded equivalent of RED
+        """
+        return self.RED + text + self.RESET
+
+    def info(self, text: str) -> str:
+        """Returns the passed string text with the ANSI color
+        coded equivalent of CYAN
+        """
+        return self.CYAN + text + self.RESET
+
+    def success(self, text: str) -> str:
+        """Returns the passed string text with the ANSI color
+        coded equivalent of GREEN
+        """
+        return self.GREEN + text + self.RESET
