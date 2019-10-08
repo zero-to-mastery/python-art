@@ -90,6 +90,8 @@ def create_thumbnail(image_file_path):
             print(e)
             continue
 
+        break
+
 
     try:
         image = Image.open(image_file_path)
@@ -102,9 +104,11 @@ def create_thumbnail(image_file_path):
     msg = f"Creating a thumbnail in the current directory (size: {input_size}X{input_size})..."
     print(Color.colorful_string(msg, ANSIColor.YELLOW))
 
+    size = input_size, input_size
+
     image_name, image_extention = image_file_path.split(".")
     image.thumbnail(size)
-    image.save(image_name + ".thumbnail." + image_extention, image_extention)
+    image.save(image_name + "-thumbnail." + image_extention, image_extention)
 
     msg = f"Thumbnail created. Please check in the current directory."
     print(Color.colorful_string(msg, ANSIColor.GREEN))
