@@ -107,10 +107,29 @@ def create_thumbnail(image_file_path):
     msg = f"Thumbnail saved. Please check in the destination directory."
     print(color.success(msg))
     
-    msg_show_img = "Would you like to see the image now?"
-    reply = input(color.info(msg_show_img))
-    if len(reply) > 0 and reply[0] == 'y':
+    userChoices = Bullet(
+            # Prompt for the user to see
+            prompt = "\n\tWould you like to see the image now?",
+            # List of options to choose from
+            choices = ["Yes", "No"],
+            # How much space to pad in from the start of the prompt 
+            align = 5,
+            # Spacing between the bullet and the choice
+            margin = 2,
+            # Space between the prompt and the list of choices
+            shift = 1,
+            # The foreground colour of the bullet
+            bullet_color = colors.foreground["cyan"]
+        )
+    menu = userChoices.launch()
+    choice = menu[0]
+    if choice == 'Y':
         image.show()
+
+    # msg_show_img = ""
+    # reply = input(color.info(msg_show_img))
+    # if len(reply) > 0 and reply[0] == 'y':
+    #     image.show()
 
 def save_text_to_file(ascii_art, filename):
     try:
