@@ -72,7 +72,7 @@ def get_image_conversion(image_filepath, clarity):
         try:
             response = requests.get(image_filepath)
             image = Image.open(BytesIO(response.content))
-        except Exception as e:
+        except FileNotFoundError as e:
             msg = f"Unable to open image file {image_filepath}."
             print(color.error(msg))
             print(e)
