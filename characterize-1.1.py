@@ -9,17 +9,20 @@ height = 65
 width = 100
 character = 'X'
 
-
+# Importing libraries
 import cv2
 import numpy as np
 from hex_color_codes1 import codes_dict,codes
 from sklearn.neighbors import NearestNeighbors
 from colored import fg,attr
 
+# Reset
 rst = attr("reset")
 
+# Coulor list
 all_colors_list = []
 
+# Starting for loops for colours
 for i in codes:
     temp = []
     for j in range(1,7,2):
@@ -56,7 +59,7 @@ for i in range(height):
             temp_to_cca.append(color_dict[tuple(new_x[i][j])])
     color_check_arr.append(temp_to_cca)
 
-
+# Showing the Image
 for i in range(height):
     for j in range(width):
         color = fg(abs(codes_dict[color_check_arr[i][j]]))
