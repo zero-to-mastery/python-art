@@ -4,6 +4,7 @@
 # code modified to work with Python 3 by @aneagoie
 import argparse
 import sys
+import os
 from io import BytesIO
 from bullet import Bullet, colors
 
@@ -82,17 +83,10 @@ def get_image_conversion(image_filepath, clarity):
 
 
 def create_thumbnail(image_file_path):
-    while True:
-        try:
-            msg = "Please enter the needed output size in pixels: "
-            input_size = int(input(color.info(msg)))
-        except ValueError as e:
-            print(e)
-            continue
-
-        break
-
-
+    input_size = []
+    while input_size.__len__() < 2:
+        msg = "Please enter the needed output size in pixels (Ex 1920x1080): "
+        input_size = input(color.info(msg)).split('x')
     try:
         image = Image.open(image_file_path)
     except Exception as e:
@@ -101,17 +95,41 @@ def create_thumbnail(image_file_path):
         print(e)
         return
 
-    msg = f"Creating a thumbnail in the current directory (size: {input_size}X{input_size})..."
+    msg = f"Creating a thumbnail of size: {input_size[0]}x{input_size[1]})..."
     print(color.info(msg))
 
-    size = input_size, input_size
+    size = int(input_size[0]), int(input_size[1])
 
-    image_name, image_extention = image_file_path.split(".")
+    image_name, image_extention = os.path.splitext(image_file_path)
     image.thumbnail(size)
-    image.save(image_name + "-thumbnail." + image_extention, image_extention)
+    image.save("{}-thumbnail{}".format(image_name, image_extention), image_extention[1:])
 
-    msg = f"Thumbnail created. Please check in the current directory."
+    msg = f"Thumbnail saved. Please check in the destination directory."
     print(color.success(msg))
+    
+    userChoices = Bullet(
+            # Prompt for the user to see
+            prompt = "\n\tWould you like to see the image now?",
+            # List of options to choose from
+            choices = ["Yes", "No"],
+            # How much space to pad in from the start of the prompt 
+            align = 5,
+            # Spacing between the bullet and the choice
+            margin = 2,
+            # Space between the prompt and the list of choices
+            shift = 1,
+            # The foreground colour of the bullet
+            bullet_color = colors.foreground["cyan"]
+        )
+    menu = userChoices.launch()
+    choice = menu[0]
+    if choice == 'Y':
+        image.show()
+
+    # msg_show_img = ""
+    # reply = input(color.info(msg_show_img))
+    # if len(reply) > 0 and reply[0] == 'y':
+    #     image.show()
 
 def save_text_to_file(ascii_art, filename):
     try:
