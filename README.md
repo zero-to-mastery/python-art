@@ -19,11 +19,12 @@ In order to get started on this project, I recommend you watch the section on **
 
 > Make sure you have all the dependencies installed, check step 3, **How to get Started** section
 
-To add new test cases
+To add new test cases 
 - Check *test_unit.py* module and start creating your test methods
-- Run the `pytest -v` command and all tests should pass
+- Or create a new test module, for naming conventions check pytest docs (link below)
+- Run `pytest -v` command to run all the tests discovered by pytest
 
-[Click](https://docs.pytest.org/en/latest/contents.html) for more imformation about pytest
+[Click](https://docs.pytest.org/en/latest/contents.html) for more imformation about **pytest**
 
 
 # How to contribute?

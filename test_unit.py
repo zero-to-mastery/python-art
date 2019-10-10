@@ -1,6 +1,7 @@
 # Python library imports
-import os
-import unittest
+import os, io
+from unittest.mock import patch
+from unittest import TestCase
 
 # Dependencies imports
 from requests.exceptions import MissingSchema
@@ -18,7 +19,7 @@ def create_pillow_object():
 
 # Test cases
 
-class TestFilePath(unittest.TestCase):
+class TestFilePath(TestCase):
     """Test if file paths"""
     TEST_PATH = 'test_file'
 
@@ -35,19 +36,15 @@ class TestFilePath(unittest.TestCase):
             ma.get_image_conversion(None, 1)
     
     def test_saved_text_to_file(self):
-        """Test if the ascii convertion was saved as a file"""
+        """Test if the ascii convertion was saved into a file"""
         img = create_pillow_object()
         ascii_string = ma.convert_image_to_ascii(img, 1)
         ma.save_text_to_file(ascii_string, self.TEST_PATH)
 
         self.assertTrue(os.path.exists(self.TEST_PATH))
 
-    def test_created_thumbnail(self):
-        """Test if a thumbnail image file is created"""
-        pass
 
-
-class TestPillowObject(unittest.TestCase):
+class TestPillowObject(TestCase):
     """Test if pillow objects are returned"""
     def create_pillow_object(self):
         """Creates and returns a temporary Pillow object"""
@@ -68,7 +65,7 @@ class TestPillowObject(unittest.TestCase):
         self.assertEqual(type(img), type(test_img))
 
 
-class TestConvertions(unittest.TestCase):
+class TestConvertions(TestCase):
     """Test cases for image convertion to strings"""
     TEST_PATH = 'test_img.png'
 
@@ -106,4 +103,3 @@ class TestConvertions(unittest.TestCase):
         ascii_string = ma.map_pixels_to_ascii_chars(img)
 
         self.assertEqual(type(ascii_string), type('string'))
-        
