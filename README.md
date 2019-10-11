@@ -15,6 +15,18 @@ In order to get started on this project, I recommend you watch the section on **
 
 **All discussions around this event can now be had in our #hacktoberfest-2019 channel on Discord!**
 
+# Running Tests
+
+> Make sure you have all the dependencies installed, check step 3, **How to get Started** section
+
+To add new test cases 
+- Check *test_unit.py* module and start creating your test methods
+- Or create a new test module, for naming conventions check pytest docs (link below)
+- Run `pytest -v` command to run all the tests discovered by pytest
+
+[Click](https://docs.pytest.org/en/latest/contents.html) for more imformation about **pytest**
+
+
 # How to contribute?
 
 Now that you see how this command line tool works, let's see how we can evolve it with our ZTM community help!! Maybe we want to display this on an HTML web page where users can submit images and we convert it to ASCII art? Maybe we want to improve how the Command Line Tool works/make it more customizeable? Or maybe modify the script to do many other types of art beyond ASCII. 
