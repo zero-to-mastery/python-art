@@ -38,11 +38,12 @@ class ColorTerm(ANSIColor):
         if platform.system() == 'Windows':
             os.system('')
         self.enabled = False
+        self.color_stats = ""
 
     def enable(self):
         """Enable color functionality"""
         self.enabled = True
-    
+
     def disable(self):
         """Disable color functionality"""
         self.enabled = False
@@ -54,21 +55,37 @@ class ColorTerm(ANSIColor):
         """
         if self.enabled:
             colored_text = ''
+            colors_used = {
+                self.BLUE : 0
+                , self.RED : 0
+                , self.GREEN : 0
+                , self.MAGENTA : 0
+                , self.CYAN : 0
+                , self.RESET : 0
+            }
 
             for char in text:
                 if char == '3':
                     colored_text += self.BLUE + char + self.RESET
+                    colors_used[self.BLUE] += 1
                 elif char == '&':
                     colored_text += self.RED + char + self.RESET
+                    colors_used[self.RED] += 1
                 elif char == '=':
                     colored_text += self.GREEN + char + self.RESET
+                    colors_used[self.GREEN] += 1
                 elif char == '+' or char == '*':
                     colored_text += self.MAGENTA + char + self.RESET
+                    colors_used[self.MAGENTA] += 1
                 elif char == '#' or char == '?':
                     colored_text += self.CYAN + char + self.RESET
+                    colors_used[self.CYAN] += 1
                 else:
                     colored_text += char
-            
+                    if char != " ":
+                        colors_used[self.RESET] += 1
+
+            self.build_color_stats(colors_used)
             return colored_text
         else:
             return text
@@ -81,7 +98,19 @@ class ColorTerm(ANSIColor):
         colorful_string('Hello', ANSIColor.RED) -> '\033[31mHello\033[0m'
         """
         return color + text + ANSIColor.RESET
-    
+
+    def build_color_stats(self, colors_used: dict):
+        """Builds a string representing the distribution of colors used in
+        the colored ascii image.
+        :param colors_used: dictionary - key: ANSIColor, value: total number
+                                              of chars with that color.
+        """
+        total = sum(colors_used.values())
+        self.color_stats = "\n\n-------------------\nColor distribution in ASCII image:\n"
+
+        for color in colors_used:
+            self.color_stats += self.colored_string("\n"+'█'*(int(colors_used[color]/total*50)), color)
+
     def warning(self, text: str) -> str:
         """Returns the passed string text with the ANSI color
         coded equivalent of YELLOW
