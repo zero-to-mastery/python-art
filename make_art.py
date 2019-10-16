@@ -48,15 +48,14 @@ def map_pixels_to_ascii_chars(image, range_width=25):
 
 
 def convert_image_to_ascii(image, clarity):
-    new_width = int(100*clarity)
-    image = scale_image(image, clarity)
-    image = convert_to_grayscale(image)
+    new_image = scale_image(image, clarity)
+    new_image = convert_to_grayscale(new_image)
+    new_width = new_image.width
 
-    pixels_to_chars = map_pixels_to_ascii_chars(image)
-    len_pixels_to_chars = len(pixels_to_chars)
+    pixels_to_chars = map_pixels_to_ascii_chars(new_image)
 
     image_ascii = [pixels_to_chars[index: index + new_width] for index in
-                   range(0, len_pixels_to_chars, new_width)]
+                   range(0, len(pixels_to_chars), new_width)]
     return "\n".join(image_ascii)
 
 
@@ -224,6 +223,9 @@ def main():
 
     image_file_path = args.image
 
+    # clarity is a scale factor applied to the width of the ascii image
+    # A clarity value of 1 represents 100 characters
+    # It has an upper limit of 2 (200 characters)
     try:
         clarity = args.clarity
         clarity = float(clarity)
