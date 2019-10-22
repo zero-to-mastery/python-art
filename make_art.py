@@ -58,12 +58,35 @@ def convert_image_to_ascii(image, clarity):
                    range(0, len(pixels_to_chars), new_width)]
     return "\n".join(image_ascii)
 
+def get_flip_options():
+    userChoices = Bullet(
+        # Prompt for the user to see
+        prompt="\n\tHow would you like the picture flipped?",
+        # List of options to choose from
+        choices=["Left to Right", "Top to Bottom", ],
+        # How much space to pad in from the start of the prompt
+        align=5,
+        # Spacing between the bullet and the choice
+        margin=2,
+        # Space between the prompt and the list of choices
+        shift=1,
+        # The foreground colour of the bullet
+        bullet_color=colors.foreground["blue"]
+    )
+    menu = userChoices.launch()
+    choice = menu[0]
 
-def get_image_conversion(image_filepath, clarity):
+    return choice.upper()
+
+def get_image_conversion(image_filepath, clarity, flipped, flip_opts):
     image = None
 
     try:
         image = Image.open(image_filepath)
+        if flipped and flip_opts == "L":
+            image = image.transpose(method=Image.FLIP_LEFT_RIGHT)
+        elif flipped and flip_opts == "T":
+            image = image.transpose(method=Image.FLIP_TOP_BOTTOM)
     except:
         """
         If path entered is invalid or image not found,
@@ -155,6 +178,7 @@ def menu(image_file_path, clarity):
         "A: Create an ASCII representation",
         "B: Create a colored ASCII representation",
         "C: Create a thumbnail",
+        "D: Create a flipped ASCII representation",
         "Q: Quit/Log Out",
     ]
 
@@ -176,17 +200,23 @@ def menu(image_file_path, clarity):
 
         menu = userChoices.launch()
         choice = menu[0]
+        flipped = False
+        flip_opts = ""
 
-        if choice.upper() == 'A' or choice.upper() == 'B':
+        if choice.upper() == 'A' or choice.upper() == 'B' or choice.upper() == 'D':
             if choice.upper() == 'A':
                 msg = f"\n Creating an ASCII representation of {image_file_path}: \n"
                 color.disable()
             elif choice.upper() == 'B':
                 msg = f"\n Creating a colored ASCII representation of {image_file_path}: \n"
                 color.enable()
+            elif choice.upper() == 'D':
+                flip_opts = get_flip_options()
+                msg = f"\n Creating a flipped ASCII representation of {image_file_path}: \n"
+                flipped = True
 
             print(color.info(msg))
-            image_ascii = get_image_conversion(image_file_path, clarity)
+            image_ascii = get_image_conversion(image_file_path, clarity, flipped, flip_opts)
             print(color.ascii_color_chars(image_ascii))
 
             while True:
