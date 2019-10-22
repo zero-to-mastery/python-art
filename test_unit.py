@@ -33,7 +33,7 @@ class TestFilePath(TestCase):
         # By default get_image_conversion throws a MissingSchema
         # exception when the image path and/or url does not exists
         with self.assertRaises(MissingSchema):
-            ma.get_image_conversion(None, 1)
+            ma.get_image_conversion(None, 1, False, "")
     
     def test_saved_text_to_file(self):
         """Test if the ascii convertion was saved into a file"""
@@ -83,7 +83,7 @@ class TestConvertions(TestCase):
     def test_image_conversion(self):
         """Test the image path exists and is converted to ascii"""
         # If the image exists, get_image_conversion returns an string
-        converted_img = ma.get_image_conversion(self.TEST_PATH, 1)
+        converted_img = ma.get_image_conversion(self.TEST_PATH, 1, False, "")
 
         self.assertEqual(type(converted_img), type('string'))
 
