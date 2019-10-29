@@ -9,7 +9,7 @@ import re
 from io import BytesIO
 from bullet import Bullet, colors
 
-from PIL import Image
+from PIL import Image, ImageSequence
 import requests
 
 from color.colored_term import ColorTerm, ANSIColor
@@ -160,6 +160,20 @@ def create_thumbnail(image_file_path):
     # if len(reply) > 0 and reply[0] == 'y':
     #     image.show()
 
+def validate_gif(image_filepath):
+    return image_filepath.endswith(".gif")
+
+def build_ascii_gif(image_filepath, clarity):
+    folder = image_filepath + "_ascii"
+    image = Image.open(image_filepath)
+
+    os.mkdir(folder)
+    frame_no = 1
+    for frame in ImageSequence.Iterator(image):
+        ascii_frame = convert_image_to_ascii(frame, clarity)
+        with open(os.path.join(folder, "frame-{}".format(frame_no)), 'a', encoding='utf-8') as file:
+            file.write(ascii_frame)
+        frame_no += 1
 
 def save_text_to_file(ascii_art, filename):
     try:
@@ -179,6 +193,7 @@ def menu(image_file_path, clarity):
         "B: Create a colored ASCII representation",
         "C: Create a thumbnail",
         "D: Create a flipped ASCII representation",
+        "E: Create an ASCII representation of a gif",
         "Q: Quit/Log Out",
     ]
 
@@ -235,10 +250,17 @@ def menu(image_file_path, clarity):
 
         elif choice.upper() == 'C':
             create_thumbnail(image_file_path)
+        elif choice.upper() == 'E':
+            if validate_gif(image_file_path):
+                build_ascii_gif(image_file_path, clarity)
+            else:
+                msg = f"ERROR!\nYou must select a gif.\nPlease try again."
+                print(color.error(msg))
+                break
         elif choice.upper() == 'Q':
             break
         else:
-            msg = f"ERROR!\nYou must only select either A,B,C or Q.\nPlease try again."
+            msg = f"ERROR!\nYou must only select either A,B,C,D,E or Q.\nPlease try again."
             print(color.error(msg))
 
         print(f'\n\n')
