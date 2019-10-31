@@ -6,8 +6,10 @@ import argparse
 import sys
 import os
 import re
+from pathlib import Path
 from io import BytesIO
-from bullet import Bullet, colors, Input
+from bullet import Bullet, colors, Input, YesNo
+
 
 from PIL import Image, ImageSequence
 import requests
@@ -163,32 +165,53 @@ def create_thumbnail(image_file_path):
 def validate_gif(image_filepath):
     return image_filepath.endswith(".gif")
 
-def gif_path_option():
-    while True:
-        folder_choices = Input(
-            # Prompt for the user to see
-            prompt="\n\tWhat is the folder you want to use for the ASCII gif? ",
-            strip=True
+def gif_path_option(image_filepath):
+    path = Path(image_filepath)
+    default_choice = YesNo(
+        # Prompt for the user to see
+        prompt="Do you want to use the default folder {0} ? ".format(path.parent),
         )
+    default = default_choice.launch()
 
-        menu = folder_choices.launch()
-        if os.path.exists(menu):
-            return menu
-        else:
-            msg = f'Error: The folder \'{menu}\' doesnt seem to exists'
-            print(color.error(msg))
+    if default:
+        return str(path.parent)
+    else:
+        while True:
+            folder_choices = Input(
+                # Prompt for the user to see
+                prompt="What is the folder you want to use for the ASCII gif? ",
+                strip=True
+            )
+
+            menu = folder_choices.launch()
+            if os.path.exists(menu):
+                return menu
+            else:
+                msg = f'Error: The folder \'{menu}\' doesnt seem to exists'
+                print(color.error(msg))
 
 def build_ascii_gif(image_filepath, clarity):
-    ascii_folder = os.path.join(gif_path_option(), "gif_ascii")
+    ascii_folder = os.path.join(gif_path_option(image_filepath), "gif_ascii")
     image = Image.open(image_filepath)
 
-    os.mkdir(ascii_folder)
+    while True:
+        try:
+            os.mkdir(ascii_folder)
+            break
+        except FileExistsError:
+            msg = f'Error: the folder \'{ascii_folder}\' already exists, please use a different path'
+            print(color.error(msg))
+            ascii_folder = os.path.join(gif_path_option(image_filepath), "gif_ascii")
+
     frame_no = 1
     for frame in ImageSequence.Iterator(image):
         ascii_frame = convert_image_to_ascii(frame, clarity)
         with open(os.path.join(ascii_folder, "frame-{}".format(frame_no)), 'a', encoding='utf-8') as file:
             file.write(ascii_frame)
         frame_no += 1
+
+    msg = color.color_stats + '\nDone'
+    print(color.info(msg))
 
 def save_text_to_file(ascii_art, filename):
     try:
