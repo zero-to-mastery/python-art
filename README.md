@@ -1,5 +1,10 @@
 # Python-Art 🎨🖌️
 
+> ### **UPDATE:**  Project Archived!
+> **This project has been archived to preserve its state at the end of Hacktoberfest 2019. Thank you to everyone that participated and made this project what it is tody and we look forward to seeing you all at Hacktoberfest 2020!
+> Interested in more events? keep an eye on our Events page [HERE](https://zerotomastery.io/events?utm_source=github&utm_medium=python-art)**
+____
+
 #### [![](https://img.shields.io/badge/PYTHON%20PROJECT-ASCII%20Art%20-blue?style=for-the-badge&logo=Python)](./ASCII-Art/)
 > Following the launch of the brand new [Complete Python Developer: Zero to Mastery](https://www.udemy.com/course/complete-python-developer-zero-to-mastery/?couponCode=LEVELUPZTM) course, here is a perfect opportunity to put those new found skills to the test. Here we will be using Python to take an image input which it will then convert into ASCII Art.
 
